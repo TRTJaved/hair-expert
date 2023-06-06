@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hair_expert_poc/src/screens/walk_through_screen.dart';
+import 'package:hair_expert_poc/src/screens/daily_routine_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const WalkThroughScreen(),
+      home: const DailyRoutineScreen(),
     );
   }
 }
