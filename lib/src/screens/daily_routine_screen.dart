@@ -3,6 +3,7 @@ import 'package:hair_expert_poc/models/time_slot_model.dart';
 import 'package:hair_expert_poc/service/api_service.dart';
 import 'package:hair_expert_poc/src/utils/constants/app_constants.dart';
 import 'package:hair_expert_poc/src/utils/constants/color_constants.dart';
+import 'package:hair_expert_poc/src/utils/custom_dialog.dart';
 import 'package:hair_expert_poc/src/utils/constants/font_family_constants.dart';
 import 'package:hair_expert_poc/src/utils/constants/image_constants.dart';
 import 'package:intl/intl.dart';
@@ -400,7 +401,9 @@ class _DailyRoutineScreenState extends State<DailyRoutineScreen> {
                   ),
                 ),
                 GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    _showCustomDialog(context);
+                  },
                   child: Padding(
                     padding: EdgeInsets.only(
                       bottom: screenSize!.height * (1 / 9),
@@ -424,6 +427,21 @@ class _DailyRoutineScreenState extends State<DailyRoutineScreen> {
                 ),
               ],
             ),
+    );
+  }
+
+  void _showCustomDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return CustomDialog(
+          title: 'Call Confirmed',
+          message: 'The KESHAH Hair Expert is excited to see you.',
+          onClosePressed: () {
+            Navigator.of(context).pop();
+          },
+        );
+      },
     );
   }
 }
