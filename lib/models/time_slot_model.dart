@@ -26,7 +26,7 @@ class TimeSlotModel {
 
 class Slot {
   List<int>? userIds;
-  DateTime? time;
+  String? time;
   List<dynamic>? users;
 
   Slot({
@@ -39,7 +39,7 @@ class Slot {
         userIds: json["userIds"] == null
             ? []
             : List<int>.from(json["userIds"]!.map((x) => x)),
-        time: json["time"] == null ? null : DateTime.parse(json["time"]),
+        time: json["time"] == null ? null : json["time"],
         users: json["users"] == null
             ? []
             : List<dynamic>.from(json["users"]!.map((x) => x)),
@@ -48,7 +48,7 @@ class Slot {
   Map<String, dynamic> toJson() => {
         "userIds":
             userIds == null ? [] : List<dynamic>.from(userIds!.map((x) => x)),
-        "time": time?.toIso8601String(),
+        "time": time,
         "users": users == null ? [] : List<dynamic>.from(users!.map((x) => x)),
       };
 }

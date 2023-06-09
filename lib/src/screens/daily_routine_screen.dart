@@ -16,47 +16,48 @@ class DailyRoutineScreen extends StatefulWidget {
 }
 
 class _DailyRoutineScreenState extends State<DailyRoutineScreen> {
-  List<DateTime> availableDates = [];
-  List<Slot> availableSlots = [];
-  DateTime? selectedDate;
+  List<String> availableDates = [];
+  String? selectedDate;
   String? selectedTime;
-  int? selectedSlotIndex;
   bool isLoading = true;
   late DateTime endTime;
+  TimeSlotModel? timeSlotModel;
+  List<DateTime> dynamicSlot = [];
+  List<String> apiSlots = [];
 
   @override
   void initState() {
     super.initState();
     fetchUserAvailableSlots();
-    //selectedDate = DateTime.now();
-    // Select the next day by default
-    final tomorrow = DateTime.now().add(
-      const Duration(days: 1),
-    );
-    selectDate(tomorrow);
+    selectDate('2023-06-08');
     endTime = DateTime.now().add(const Duration(
         hours: 1)); // Set the end time to 1 hour from the current time
   }
 
+  //Fetch Api for getting Slots details
   void fetchUserAvailableSlots() async {
+    final now = DateTime.now();
+    final startDate =
+        now.toIso8601String().split('T')[0]; // Start date is today
+    final endDate = now
+        .add(const Duration(days: 10))
+        .toIso8601String()
+        .split('T')[0]; // End date is one week later
     setState(() {
       isLoading = true;
     });
-
     try {
       final slotData = await ApiService.fetchUserAvailableSlots(
-          eventTypeId: '309631',
-          startTime: '2023-06-07',
-          endTime: '2023-06-15',
+          eventTypeId: '312671',
+          startTime: startDate,
+          endTime: endDate,
           apiKey: 'cal_live_6055a5adaa9defc72ea0e34cb1bc4f5a',
           timeZone: 'Asia/Kolkata');
-
       setState(() {
-        availableDates = slotData.slots!.keys
-            .map((dateStr) => DateTime.parse(dateStr))
-            .toList();
-        availableSlots = slotData.slots!.values.expand((list) => list).toList();
+        timeSlotModel = slotData;
+        availableDates = slotData.slots!.keys.toList();
         isLoading = false;
+        selectDate(availableDates.first);
       });
     } catch (e) {
       print('Failed to fetch user available slots. Error: $e');
@@ -66,23 +67,51 @@ class _DailyRoutineScreenState extends State<DailyRoutineScreen> {
     }
   }
 
-  void selectDate(DateTime date) {
+  myTimeSlots(String? dateString) {
+    DateTime date = DateTime.parse(dateString!);
+    DateTime startTime = DateTime(date.year, date.month, date.day, 9);
+    DateTime endTime = DateTime(date.year, date.month, date.day, 19);
+
+    List<DateTime> timeSlots = generateTimeSlots(
+      startTime,
+      endTime,
+      const Duration(hours: 1),
+    );
+    List<DateTime> genratedDate = [];
+    for (var time in timeSlots) {
+      print(time);
+      genratedDate.add(time);
+    }
+
+    dynamicSlot = genratedDate;
+  }
+
+  List<DateTime> generateTimeSlots(
+      DateTime start, DateTime end, Duration duration) {
+    List<DateTime> timeSlots = [];
+    DateTime time = start;
+
+    while (time.isBefore(end)) {
+      timeSlots.add(time);
+      time = time.add(duration);
+    }
+
+    return timeSlots;
+  }
+
+  void selectDate(String date) {
     setState(() {
       selectedDate = date;
       selectedTime = null;
-      selectedSlotIndex = null;
+      myTimeSlots(date);
     });
+    print(selectedDate);
   }
 
   void selectTime(String time) {
     setState(() {
       selectedTime = time;
-    });
-  }
-
-  void selectTimeSlot(int index) {
-    setState(() {
-      selectedSlotIndex = index;
+      selectedTimeSlot = null;
     });
   }
 
@@ -252,14 +281,12 @@ class _DailyRoutineScreenState extends State<DailyRoutineScreen> {
                       scrollDirection: Axis.horizontal,
                       itemCount: availableDates.length,
                       itemBuilder: (context, index) {
-                        final date = availableDates[index];
-                        final isSelected = selectedDate != null &&
-                            date.day == selectedDate!.day &&
-                            date.month == selectedDate!.month &&
-                            date.year == selectedDate!.year;
+                        final date = DateTime.parse(availableDates[index]);
+                        final isSelected =
+                            selectedDate == availableDates[index];
                         return GestureDetector(
                           onTap: () {
-                            selectDate(date);
+                            selectDate(availableDates[index]);
                           },
                           child: Padding(
                             padding: const EdgeInsets.only(
@@ -336,65 +363,70 @@ class _DailyRoutineScreenState extends State<DailyRoutineScreen> {
                       horizontal: 23,
                       vertical: 23,
                     ),
-                    child: ListView.builder(
+                    child: GridView.builder(
                       padding: EdgeInsets.zero,
-                      itemCount: (availableSlots.length / 3).ceil(),
-                      itemBuilder: (context, rowIndex) {
-                        final startIndex = rowIndex * 3;
-                        final endIndex = startIndex + 3;
-                        final rowSlots = availableSlots.sublist(
-                            startIndex,
-                            endIndex < availableSlots.length
-                                ? endIndex
-                                : availableSlots.length);
-                        return Wrap(
-                          spacing: 13,
-                          runSpacing: 16.0,
-                          children: List.generate(rowSlots.length, (index) {
-                            final slot = rowSlots[index];
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 3,
+                        childAspectRatio: 3.0,
+                        crossAxisSpacing: 13,
+                        mainAxisSpacing: 15,
+                      ),
+                      itemCount: dynamicSlot.length,
+                      itemBuilder: (context, index) {
+                        final timeSlot = dynamicSlot[index];
+                        final isSelected = selectedDate != null &&
+                            selectedTimeSlot == timeSlot;
+                        List<Slot>? slotList =
+                            timeSlotModel?.slots?[selectedDate];
 
-                            final istTime = DateFormat('hh:mm a')
-                                .format(slot.time!.toLocal());
-                            final startTime = DateTime(slot.time!.year,
-                                slot.time!.month, slot.time!.day, 9, 0);
-                            final endTime = DateTime(slot.time!.year,
-                                slot.time!.month, slot.time!.day, 20, 0);
+                        List<DateTime>? getTimeStringsFromSlots(
+                            List<Slot>? slotList) {
+                          return slotList
+                              ?.map((slot) => convertToIST(slot.time ?? ''))
+                              .toList();
+                        }
 
-                            if (selectedDate != null &&
-                                slot.time!.day == selectedDate!.day &&
-                                slot.time!.month == selectedDate!.month &&
-                                slot.time!.year == selectedDate!.year) {
-                              final isSelected =
-                                  selectedSlotIndex == startIndex + index;
-                              return GestureDetector(
-                                onTap: () {
-                                  selectTimeSlot(startIndex + index);
-                                },
-                                child: Padding(
-                                  padding: const EdgeInsets.only(
-                                    bottom: 15,
-                                  ),
-                                  child: Container(
-                                    width: 103,
-                                    height: 37,
-                                    decoration: BoxDecoration(
-                                      color: isSelected ? kBlack : kLightGrey,
-                                    ),
-                                    child: Center(
-                                      child: Text(
-                                        istTime,
-                                        style: TextStyle(
-                                          fontSize: 12,
-                                          color: isSelected ? kWhite : kBlack,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
+                        print(getTimeStringsFromSlots(slotList));
+                        final isApiSlotAvailable =
+                            (getTimeStringsFromSlots(slotList)
+                                        ?.contains(timeSlot) ??
+                                    false) &&
+                                (timeSlot.compareTo(DateTime.now()) > 0);
+
+                        final isSelectable =
+                            isApiSlotAvailable && selectedDate != null;
+                        final formattedTimeSlot =
+                            _formatTime(timeSlot); // Format the time slot
+                        return GestureDetector(
+                          onTap: isSelectable
+                              ? () => selectTimeSlot(timeSlot)
+                              : null,
+                          child: Container(
+                            height: 37,
+                            width: 137,
+                            decoration: BoxDecoration(
+                              color: isSelected
+                                  ? kBlack
+                                  : (isApiSlotAvailable
+                                      ? kLightGrey
+                                      : kLightGrey),
+                            ),
+                            child: Center(
+                              child: Text(
+                                formattedTimeSlot,
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w400,
+                                  color: isSelected
+                                      ? Colors.white
+                                      : (isApiSlotAvailable
+                                          ? kBlack
+                                          : kDisabledText),
                                 ),
-                              );
-                            }
-                            return const SizedBox.shrink();
-                          }),
+                              ),
+                            ),
+                          ),
                         );
                       },
                     ),
@@ -430,18 +462,40 @@ class _DailyRoutineScreenState extends State<DailyRoutineScreen> {
     );
   }
 
-  void _showCustomDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return CustomDialog(
-          title: 'Call Confirmed',
-          message: 'The KESHAH Hair Expert is excited to see you.',
-          onClosePressed: () {
-            Navigator.of(context).pop();
-          },
-        );
-      },
-    );
+  DateTime? selectedTimeSlot;
+  void selectTimeSlot(DateTime timeSlot) {
+    setState(() {
+      selectedTimeSlot = timeSlot;
+      print(timeSlot);
+    });
   }
+}
+
+DateTime convertToIST(String utcDataString) {
+  DateTime utcDate = DateTime.parse(utcDataString);
+
+  DateTime istDate = utcDate.toLocal();
+
+  // String formattedISTDate = DateFormat('yyyy-MM-dd HH:mm:ss').format(istDate);
+  return istDate;
+}
+
+String _formatTime(DateTime time) {
+  final formattedTime = DateFormat("hh:mm a").format(time);
+  return formattedTime;
+}
+
+void _showCustomDialog(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return CustomDialog(
+        title: 'Call Confirmed',
+        message: 'The KESHAH Hair Expert is excited to see you.',
+        onClosePressed: () {
+          Navigator.of(context).pop();
+        },
+      );
+    },
+  );
 }
