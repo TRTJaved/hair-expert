@@ -11,6 +11,7 @@ String createBookingModelToJson(CreateBookingModel data) =>
     json.encode(data.toJson());
 
 class CreateBookingModel {
+  int? userId;
   String? name;
   String? email;
   String? notes;
@@ -24,11 +25,12 @@ class CreateBookingModel {
   String? language;
   String? user;
   String? location;
-  final Metadata? metadata;
+  Metadata? metadata;
   bool? hasHashedBookingLink;
   dynamic hashedLink;
 
   CreateBookingModel({
+    this.userId,
     this.name,
     this.email,
     this.notes,
@@ -49,6 +51,7 @@ class CreateBookingModel {
 
   factory CreateBookingModel.fromJson(Map<String, dynamic> json) =>
       CreateBookingModel(
+        userId: json["userId"],
         name: json["name"],
         email: json["email"],
         notes: json["notes"],
@@ -75,6 +78,7 @@ class CreateBookingModel {
       );
 
   Map<String, dynamic> toJson() => {
+        "userId": userId,
         "name": name,
         "email": email,
         "notes": notes,
