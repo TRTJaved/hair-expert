@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hair_expert_poc/src/utils/constants/app_constants.dart';
 import 'package:hair_expert_poc/src/utils/constants/color_constants.dart';
 import 'package:hair_expert_poc/src/utils/constants/image_constants.dart';
 
@@ -12,8 +11,8 @@ class KeshahHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(
-        top: screenSize!.height * (1 / 15.615),
+      padding: const EdgeInsets.only(
+        top: 52,
         left: 42,
         right: 28,
       ),
