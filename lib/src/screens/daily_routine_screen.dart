@@ -4,8 +4,8 @@ import 'package:hair_expert_poc/service/api_service.dart';
 import 'package:hair_expert_poc/src/utils/constants/app_constants.dart';
 import 'package:hair_expert_poc/src/utils/constants/color_constants.dart';
 import 'package:hair_expert_poc/src/utils/custom_dialog.dart';
-import 'package:hair_expert_poc/src/utils/constants/font_family_constants.dart';
-import 'package:hair_expert_poc/src/utils/constants/image_constants.dart';
+import 'package:hair_expert_poc/src/utils/google_font_text.dart';
+import 'package:hair_expert_poc/src/utils/keshah_header.dart';
 import 'package:intl/intl.dart';
 
 class DailyRoutineScreen extends StatefulWidget {
@@ -70,7 +70,7 @@ class _DailyRoutineScreenState extends State<DailyRoutineScreen> {
   myTimeSlots(String? dateString) {
     DateTime date = DateTime.parse(dateString!);
     DateTime startTime = DateTime(date.year, date.month, date.day, 9);
-    DateTime endTime = DateTime(date.year, date.month, date.day, 19);
+    DateTime endTime = DateTime(date.year, date.month, date.day, 18);
 
     List<DateTime> timeSlots = generateTimeSlots(
       startTime,
@@ -146,56 +146,17 @@ class _DailyRoutineScreenState extends State<DailyRoutineScreen> {
             )
           : Column(
               children: [
+                const KeshahHeader(),
                 Padding(
-                  padding: EdgeInsets.only(
-                    top: screenSize!.height * (1 / 15.615),
-                    left: screenSize!.width * (1 / 15.625),
-                    right: screenSize!.width * (1 / 15.625),
-                  ),
+                  padding: const EdgeInsets.only(left: 42),
                   child: Row(
                     children: [
-                      RichText(
-                        text: const TextSpan(
-                          text: 'KESHAH',
-                          style: TextStyle(
-                            color: kBlack,
-                            fontSize: 24,
-                            fontFamily: fMontserrat,
-                          ),
-                          children: [
-                            TextSpan(
-                              text: 'Vault',
-                              style: TextStyle(
-                                color: kBlack,
-                                fontSize: 20,
-                                fontFamily: fMontserrat,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const Spacer(),
-                      const CircleAvatar(
-                        backgroundImage: AssetImage(
-                          icUser,
-                        ),
-                        maxRadius: 30,
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding:
-                      EdgeInsets.only(left: screenSize!.width * (1 / 8.928)),
-                  child: const Row(
-                    children: [
-                      Text(
-                        "Companion",
-                        style: TextStyle(
-                            color: kBlack,
-                            fontSize: 28,
-                            fontWeight: FontWeight.w600,
-                            fontFamily: fMontserrat),
+                      GoogleFontsText(
+                        text: 'Companion',
+                        fontFamily: 'Montserrat',
+                        color: Colors.black,
+                        fontSize: 28,
+                        fontWeight: FontWeight.w600,
                       ),
                     ],
                   ),
@@ -209,8 +170,8 @@ class _DailyRoutineScreenState extends State<DailyRoutineScreen> {
                   decoration: const BoxDecoration(
                     color: kLightGrey,
                   ),
-                  child: const Padding(
-                    padding: EdgeInsets.only(
+                  child: Padding(
+                    padding: const EdgeInsets.only(
                       top: 15,
                       right: 40,
                     ),
@@ -219,28 +180,24 @@ class _DailyRoutineScreenState extends State<DailyRoutineScreen> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            Text(
-                              "Aaditya Agrawal",
-                              style: TextStyle(
-                                color: kBlack,
-                                fontWeight: FontWeight.w600,
-                                fontSize: 18,
-                                fontFamily: fMontserrat,
-                              ),
+                            GoogleFontsText(
+                              text: 'Aaditya Agrawal',
+                              fontFamily: 'Montserrat',
+                              color: Colors.black,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w600,
                             ),
                           ],
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            Text(
-                              "KESHAH Hair Expert",
-                              style: TextStyle(
-                                color: kKESHAHHairExpert,
-                                fontWeight: FontWeight.w500,
-                                fontSize: 12,
-                                fontFamily: fMontserrat,
-                              ),
+                            GoogleFontsText(
+                              text: 'KESHAH Hair Expert',
+                              fontFamily: 'Montserrat',
+                              color: kKESHAHHairExpert,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
                             ),
                           ],
                         ),
@@ -251,20 +208,18 @@ class _DailyRoutineScreenState extends State<DailyRoutineScreen> {
                 const SizedBox(
                   height: 18,
                 ),
-                const Padding(
-                  padding: EdgeInsets.only(
+                Padding(
+                  padding: const EdgeInsets.only(
                     left: 24,
                   ),
                   child: Row(
                     children: [
-                      Text(
-                        "Select Date",
-                        style: TextStyle(
-                          color: kBlack,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 18,
-                          fontFamily: fMontserrat,
-                        ),
+                      GoogleFontsText(
+                        text: 'Select Date',
+                        fontFamily: 'Montserrat',
+                        color: kBlack,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
                       ),
                     ],
                   ),
@@ -301,21 +256,19 @@ class _DailyRoutineScreenState extends State<DailyRoutineScreen> {
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Text(
-                                    _getWeekdayName(date.weekday),
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      color: isSelected ? kWhite : kSelectDay,
-                                      fontWeight: FontWeight.w400,
-                                    ),
+                                  GoogleFontsText(
+                                    text: _getWeekdayName(date.weekday),
+                                    fontFamily: 'Inter',
+                                    color: isSelected ? kWhite : kSelectDay,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w400,
                                   ),
-                                  Text(
-                                    '${date.day}',
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w600,
-                                      color: isSelected ? kWhite : kBlack,
-                                    ),
+                                  GoogleFontsText(
+                                    text: '${date.day}',
+                                    fontFamily: 'Inter',
+                                    color: isSelected ? kWhite : kBlack,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w600,
                                   ),
                                 ],
                               ),
@@ -339,20 +292,18 @@ class _DailyRoutineScreenState extends State<DailyRoutineScreen> {
                 const SizedBox(
                   height: 18,
                 ),
-                const Padding(
-                  padding: EdgeInsets.only(
+                Padding(
+                  padding: const EdgeInsets.only(
                     left: 24,
                   ),
                   child: Row(
                     children: [
-                      Text(
-                        "Select Time",
-                        style: TextStyle(
-                          color: kBlack,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 18,
-                          fontFamily: fMontserrat,
-                        ),
+                      GoogleFontsText(
+                        text: 'Select Time',
+                        fontFamily: 'Montserrat',
+                        color: kBlack,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
                       ),
                     ],
                   ),
@@ -413,17 +364,16 @@ class _DailyRoutineScreenState extends State<DailyRoutineScreen> {
                                       : kLightGrey),
                             ),
                             child: Center(
-                              child: Text(
-                                formattedTimeSlot,
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w400,
-                                  color: isSelected
-                                      ? Colors.white
-                                      : (isApiSlotAvailable
-                                          ? kBlack
-                                          : kDisabledText),
-                                ),
+                              child: GoogleFontsText(
+                                text: formattedTimeSlot,
+                                fontFamily: 'Inter',
+                                color: isSelected
+                                    ? Colors.white
+                                    : (isApiSlotAvailable
+                                        ? kBlack
+                                        : kDisabledText),
+                                fontSize: 12,
+                                fontWeight: FontWeight.w400,
                               ),
                             ),
                           ),
@@ -444,14 +394,13 @@ class _DailyRoutineScreenState extends State<DailyRoutineScreen> {
                       width: 339,
                       height: 37,
                       decoration: const BoxDecoration(color: kBlack),
-                      child: const Center(
-                        child: Text(
-                          "Book Call",
-                          style: TextStyle(
-                            color: kWhite,
-                            fontWeight: FontWeight.w700,
-                            fontSize: 14,
-                          ),
+                      child: Center(
+                        child: GoogleFontsText(
+                          text: 'Book Call',
+                          fontFamily: 'Montserrat',
+                          color: kWhite,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w700,
                         ),
                       ),
                     ),

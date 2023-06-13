@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hair_expert_poc/src/utils/constants/color_constants.dart';
 import 'package:hair_expert_poc/src/utils/constants/image_constants.dart';
+import 'package:hair_expert_poc/src/utils/google_font_text.dart';
 
 class CustomDialog extends StatelessWidget {
   final String title;
@@ -42,26 +43,24 @@ class CustomDialog extends StatelessWidget {
             const SizedBox(
               height: 40,
             ),
-            Text(
-              title,
-              style: const TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w700,
-              ),
+            GoogleFontsText(
+              text: title,
+              fontFamily: 'Inter',
+              color: kBlack,
+              fontSize: 20,
+              fontWeight: FontWeight.w700,
             ),
             const SizedBox(height: 8),
             Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: 27,
               ),
-              child: Text(
-                message,
-                style: const TextStyle(
-                  color: kSelectDay,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w400,
-                ),
-                textAlign: TextAlign.center,
+              child: GoogleFontsText(
+                text: message,
+                fontFamily: 'Inter',
+                color: kSelectDay,
+                fontSize: 16,
+                fontWeight: FontWeight.w400,
               ),
             ),
             const SizedBox(height: 48),
@@ -73,14 +72,13 @@ class CustomDialog extends StatelessWidget {
                 decoration: const BoxDecoration(
                   color: kBlack,
                 ),
-                child: const Center(
-                  child: Text(
-                    "Home",
-                    style: TextStyle(
-                      color: kWhite,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                    ),
+                child: Center(
+                  child: GoogleFontsText(
+                    text: "Home",
+                    fontFamily: 'Inter',
+                    color: kWhite,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ),
