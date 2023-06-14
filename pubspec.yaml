@@ -38,6 +38,7 @@ dependencies:
   flutter_calendar_carousel: ^2.4.2
   intl: ^0.18.1
   google_fonts: ^5.0.0
+  pinput: ^2.2.31
 
 dev_dependencies:
   flutter_test:

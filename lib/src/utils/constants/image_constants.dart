@@ -4,3 +4,4 @@ const String icKeshahLogo = "assets/images/keshah_logo.png";
 const String icVault = "assets/images/Vault.png";
 const String icCalendar = "assets/images/calendar.png";
 const String icTime = "assets/images/time.png";
+const String icLeftArrow = "assets/images/left_arrow.png";
